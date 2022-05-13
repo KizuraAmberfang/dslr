@@ -32,5 +32,11 @@ for row in file:
 file.close()
 csvRead = pd.read_csv(sys.argv[1])
 df = pd.DataFrame(csvRead)
+
+# gestione dell'headbar
+
 count(matrix, head)
+mean(matrix)
+min(matrix)
+max(matrix)
 print(df.describe())
