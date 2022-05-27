@@ -1,7 +1,9 @@
+import math
+
 def isNaN(num):
     return num != num
 
-def count(matrix, head):
+def count(matrix):
 	count = len(matrix[0])
 	res = []
 	for i in range(count):
@@ -13,17 +15,11 @@ def count(matrix, head):
 					n += 1
 			except:
 				pass
-		res.append(n)
-	out = "count\t"
-	headout = "\t\t"
-	i = 0
-	for x in res:
-		if (x != 0):
-			headout = headout + head[i] + "\t"
-			out = out + "%0.6f" % x + "\t"
-		i += 1
-	print(headout)
-	print(out)
+		if n > 0:
+			res.append(n)
+		else:
+			res.append("NaN")
+	return res
 
 def mean(matrix):
 	count = len(matrix[0])
@@ -41,10 +37,41 @@ def mean(matrix):
 				pass
 		if n != 0:
 			res.append(sum / n)
-	out = "mean\t"
-	for x in res:
-		out = out + "%0.6f" % x + "\t"
-	print(out)
+		else:
+			res.append("NaN")
+	return res
+
+def variance(matrix, mean):
+	count = len(matrix[0])
+	res = []
+	for i in range(count):
+		if mean[i] != "NaN":
+			sum = 0
+			n = 0
+			for x in matrix:
+				try:
+					f = float(x[i])
+					if isNaN(f) == 0:
+						sum += (f - mean[i]) ** 2
+						n += 1
+				except:
+					pass
+			if n > 1:
+				res.append(sum / (n - 1))
+			else:
+				res.append("NaN")
+		else:
+			res.append("NaN")
+	return (res)
+
+def std(matrix):
+	res = []
+	for x in matrix:
+		if (x != "NaN"):
+			res.append(math.sqrt(x))
+		else:
+			res.append("NaN")
+	return res
 
 def min(matrix):
 	count = len(matrix[0])
@@ -62,10 +89,10 @@ def min(matrix):
 				pass
 		if n != 0:
 			res.append(min)
-	out = "min\t"
-	for x in res:
-		out = out + "%0.6f" % x + "\t"
-	print(out)
+		else:
+			res.append("NaN")
+	return (res)
+
 
 def max(matrix):
 	count = len(matrix[0])
@@ -83,7 +110,14 @@ def max(matrix):
 				pass
 		if n != 0:
 			res.append(max)
-	out = "max\t"
-	for x in res:
-		out = out + "%0.6f" % x + "\t"
+		else:
+			res.append("NaN")
+	return (res)
+
+
+def print_desc(str, arr):
+	out = str + "\t"
+	for x in arr:
+		if x != "NaN":
+			out = out + "%0.6f" % x + "\t"
 	print(out)
