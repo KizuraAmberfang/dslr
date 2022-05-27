@@ -93,7 +93,6 @@ def min(matrix):
 			res.append("NaN")
 	return (res)
 
-
 def max(matrix):
 	count = len(matrix[0])
 	res = []
@@ -114,6 +113,46 @@ def max(matrix):
 			res.append("NaN")
 	return (res)
 
+def cent(matrix, count, nquant):
+	cnt = len(count)
+	res = []
+	for i in range(cnt):
+		if count[i] != "NaN":
+			lst = matrix[i]
+	# conto quanti elementi sono nulli, perchè dovrò saltarli
+			nullind = len(lst) - count[i]
+			n = (float)(count[i] * nquant)
+			nint = int(n)
+			if n - nint == 0:
+				try:
+					float(lst[nint - 1 + nullind])
+					res.append(float(lst[nint - 1 + nullind]))
+				except:
+					res.append("NaN")
+			else:
+				lower = nint - 1 + nullind
+				upper = lower + 1
+				diff = (float(lst[upper]) - float(lst[lower])) * (n - nint)
+				print(diff)
+				print(float(lst[lower]) + diff)
+				res.append(float(lst[lower]) + diff)
+		else:
+			res.append("NaN")
+	return res
+
+def transpose(matrix):
+	ret = []
+	for i in range(len(matrix[0])):
+		row = []
+		for x in matrix:
+			row.append(x[i])
+		try:
+			row = [float(x) for x in row]
+		except:
+			pass
+		row.sort()
+		ret.append(row)
+	return ret
 
 def print_desc(str, arr):
 	out = str + "\t"
