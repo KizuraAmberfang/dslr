@@ -133,8 +133,6 @@ def cent(matrix, count, nquant):
 				lower = nint - 1 + nullind
 				upper = lower + 1
 				diff = (float(lst[upper]) - float(lst[lower])) * (n - nint)
-				print(diff)
-				print(float(lst[lower]) + diff)
 				res.append(float(lst[lower]) + diff)
 		else:
 			res.append("NaN")
@@ -173,21 +171,33 @@ def print_head(str, arr, app):
 
 def describe(head, count, mean, std, min, cent_25, cent_50, cent_75, max):
 	spaces = []
-	spaces.push(7)
+	spaces.append(7)
 	for i in range(len(head)):
 		n = 0
-		if (n < len(head[i])):
-			n = len(head[i])
-		if (n < len(str(count[i]))):
-			n = len(str(count[i]))
-		if (n < len(head[i])):
-			n = len(head[i])
-		if (n < len(head[i])):
-			n = len(head[i])
-		if (n < len(head[i])):
-			n = len(head[i])
-		if (n < len(head[i])):
-			n = len(head[i])
-
-		spaces.push(n + 2)
-	
+		if count[i] != "NaN":
+			if n < len(head[i]):
+				n = len(head[i])
+			if (n < len(str(count[i]))):
+				n = len(str(count[i]))
+			if (n < len(str(mean[i]))):
+				n = len(str(mean[i]))
+			if (n < len(str(std[i]))):
+				n = len(str(std[i]))
+			if (n < len(str(min[i]))):
+				n = len(str(min[i]))
+			if (n < len(str(cent_25[i]))):
+				n = len(str(cent_25))
+			if (n < len(str(cent_50[i]))):
+				n = len(str(cent_50))
+			if (n < len(str(cent_75[i]))):
+				n = len(str(cent_75))
+			if (n < len(str(max[i]))):
+				n = len(str(max[i]))
+			if (n != 0):
+				spaces.append(n + 2)
+			else:
+				spaces.append("NaN")
+		else:
+			spaces.append("NaN")
+		print(n)
+	return spaces
