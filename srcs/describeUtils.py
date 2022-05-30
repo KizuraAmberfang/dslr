@@ -158,5 +158,36 @@ def print_desc(str, arr):
 	out = str + "\t"
 	for x in arr:
 		if x != "NaN":
-			out = out + "%0.6f" % x + "\t"
+			out = out + "{:>15}".format("%0.6f" % x) + "\t"
 	print(out)
+
+def print_head(str, arr, app):
+	out = str
+	i = 0
+	for x in app:
+		if x != "NaN":
+			# out = out + "{:>15}".format(arr[i])
+			out = out + "  " + arr[i]
+		i += 1
+	print(out)
+
+def describe(head, count, mean, std, min, cent_25, cent_50, cent_75, max):
+	spaces = []
+	spaces.push(7)
+	for i in range(len(head)):
+		n = 0
+		if (n < len(head[i])):
+			n = len(head[i])
+		if (n < len(str(count[i]))):
+			n = len(str(count[i]))
+		if (n < len(head[i])):
+			n = len(head[i])
+		if (n < len(head[i])):
+			n = len(head[i])
+		if (n < len(head[i])):
+			n = len(head[i])
+		if (n < len(head[i])):
+			n = len(head[i])
+
+		spaces.push(n + 2)
+	
