@@ -3,6 +3,7 @@
 import sys
 from describeUtils import * 
 import matplotlib.pyplot as plt
+import numpy as np
 
 if len(sys.argv) != 2:
 	print("Usage: python3 histogram.py fileName")
@@ -45,17 +46,14 @@ for x in matrix:
 	if x[1] == "Slytherin":
 		slyth.append(x)
 
+
 gryf_t = transpose(gryf)
 raven_t = transpose(raven)
 huffle_t = transpose(huffle)
 slyth_t = transpose(slyth)
 
-fig, axs = plt.subplots()
-axs.hist(gryf_t[6], 10)
-axs.hist(raven_t[6], 10)
-axs.hist(huffle_t[6], 10)
-axs.hist(slyth_t[6], 10)
-
+h1 = gryf_t
+plt.hist(h1, color="red", alpha=0.5)
 # axs[1].hist(gryf_t[7])
 # axs[1].hist(raven_t[7])
 # axs[1].hist(huffle_t[7])

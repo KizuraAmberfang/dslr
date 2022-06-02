@@ -21,6 +21,14 @@ def count(matrix):
 			res.append("NaN")
 	return res
 
+def count_(matrix):
+	try:
+		matrix = matrix.astype('float')
+		matrix = matrix[isNaN(matrix)]
+		return len(matrix)
+	except:
+		return len(matrix)
+
 def mean(matrix):
 	count = len(matrix[0])
 	res = []
@@ -199,5 +207,8 @@ def describe(head, count, mean, std, min, cent_25, cent_50, cent_75, max):
 				spaces.append("NaN")
 		else:
 			spaces.append("NaN")
-		print(n)
 	return spaces
+
+	class ft_describe:
+		def read_csv(self, filepath):
+			pass
