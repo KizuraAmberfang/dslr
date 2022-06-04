@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 def isNaN(num):
     return num != num
@@ -18,16 +19,8 @@ def count(matrix):
 		if n > 0:
 			res.append(n)
 		else:
-			res.append("NaN")
+			res.append(np.nan)
 	return res
-
-def count_(matrix):
-	try:
-		matrix = matrix.astype('float')
-		matrix = matrix[isNaN(matrix)]
-		return len(matrix)
-	except:
-		return len(matrix)
 
 def mean(matrix):
 	count = len(matrix[0])
@@ -46,14 +39,14 @@ def mean(matrix):
 		if n != 0:
 			res.append(sum / n)
 		else:
-			res.append("NaN")
+			res.append(np.nan)
 	return res
 
 def variance(matrix, mean):
 	count = len(matrix[0])
 	res = []
 	for i in range(count):
-		if mean[i] != "NaN":
+		if mean[i] != np.nan:
 			sum = 0
 			n = 0
 			for x in matrix:
@@ -67,18 +60,18 @@ def variance(matrix, mean):
 			if n > 1:
 				res.append(sum / (n - 1))
 			else:
-				res.append("NaN")
+				res.append(np.nan)
 		else:
-			res.append("NaN")
+			res.append(np.nan)
 	return (res)
 
 def std(matrix):
 	res = []
 	for x in matrix:
-		if (x != "NaN"):
+		if (x != np.nan):
 			res.append(math.sqrt(x))
 		else:
-			res.append("NaN")
+			res.append(np.nan)
 	return res
 
 def min(matrix):
@@ -98,7 +91,7 @@ def min(matrix):
 		if n != 0:
 			res.append(min)
 		else:
-			res.append("NaN")
+			res.append(np.nan)
 	return (res)
 
 def max(matrix):
@@ -118,33 +111,29 @@ def max(matrix):
 		if n != 0:
 			res.append(max)
 		else:
-			res.append("NaN")
+			res.append(np.nan)
 	return (res)
 
-def cent(matrix, count, nquant):
-	cnt = len(count)
-	res = []
-	for i in range(cnt):
-		if count[i] != "NaN":
-			lst = matrix[i]
-	# conto quanti elementi sono nulli, perchè dovrò saltarli
-			nullind = len(lst) - count[i]
-			n = (float)(count[i] * nquant)
-			nint = int(n)
-			if n - nint == 0:
-				try:
-					float(lst[nint - 1 + nullind])
-					res.append(float(lst[nint - 1 + nullind]))
-				except:
-					res.append("NaN")
+def cent(matrix, nquant):
+	columns = matrix.dtype.names
+	ret = []
+	for i in range(0, len(columns)):
+		col = np.array(matrix[columns[i]], dtype=float)
+		col = col[~np.isnan(col)]
+		if col.any():
+			col.sort()
+			index = (len(col) - 1) * (nquant / 100)
+			lower = np.floor(index)
+			upper = np.ceil(index)
+			if lower == upper:
+				ret.append(col[int(index)])
 			else:
-				lower = nint - 1 + nullind
-				upper = lower + 1
-				diff = (float(lst[upper]) - float(lst[lower])) * (n - nint)
-				res.append(float(lst[lower]) + diff)
+				first = col[int(lower)] * (upper - index)
+				second = col[int(upper)] * (index - lower)
+				ret.append(first + second)
 		else:
-			res.append("NaN")
-	return res
+			ret.append(np.nan)
+	return ret
 
 def transpose(matrix):
 	ret = []
@@ -160,55 +149,16 @@ def transpose(matrix):
 		ret.append(row)
 	return ret
 
-def print_desc(str, arr):
-	out = str + "\t"
-	for x in arr:
-		if x != "NaN":
-			out = out + "{:>15}".format("%0.6f" % x) + "\t"
+def print_desc(head, arr, len_str):
+	out = head
+	for i in range(len(len_str)):
+		if ~np.isnan(arr[i]):
+			temp = "{:>" + str(len_str[i]) + "}"
+			out = out + temp.format("%0.6f" % arr[i])
 	print(out)
 
-def print_head(str, arr, app):
-	out = str
-	i = 0
-	for x in app:
-		if x != "NaN":
-			# out = out + "{:>15}".format(arr[i])
-			out = out + "  " + arr[i]
-		i += 1
-	print(out)
-
-def describe(head, count, mean, std, min, cent_25, cent_50, cent_75, max):
-	spaces = []
-	spaces.append(7)
-	for i in range(len(head)):
-		n = 0
-		if count[i] != "NaN":
-			if n < len(head[i]):
-				n = len(head[i])
-			if (n < len(str(count[i]))):
-				n = len(str(count[i]))
-			if (n < len(str(mean[i]))):
-				n = len(str(mean[i]))
-			if (n < len(str(std[i]))):
-				n = len(str(std[i]))
-			if (n < len(str(min[i]))):
-				n = len(str(min[i]))
-			if (n < len(str(cent_25[i]))):
-				n = len(str(cent_25))
-			if (n < len(str(cent_50[i]))):
-				n = len(str(cent_50))
-			if (n < len(str(cent_75[i]))):
-				n = len(str(cent_75))
-			if (n < len(str(max[i]))):
-				n = len(str(max[i]))
-			if (n != 0):
-				spaces.append(n + 2)
-			else:
-				spaces.append("NaN")
-		else:
-			spaces.append("NaN")
-	return spaces
-
-	class ft_describe:
-		def read_csv(self, filepath):
-			pass
+def	ft_len(f):
+	str_len = 0
+	if ~np.isnan(f):
+		str_len = len(str(np.trunc(f))) + 5
+	return str_len
