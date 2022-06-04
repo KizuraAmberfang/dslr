@@ -118,7 +118,11 @@ def cent(matrix, nquant):
 	columns = matrix.dtype.names
 	ret = []
 	for i in range(0, len(columns)):
-		col = np.array(matrix[columns[i]], dtype=float)
+		try:
+			col = np.array(matrix[columns[i]], dtype=float)
+		except:
+			col = np.empty(len(matrix[columns[i]]))
+			col[:] = np.nan
 		col = col[~np.isnan(col)]
 		if col.any():
 			col.sort()

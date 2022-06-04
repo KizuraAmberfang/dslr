@@ -4,10 +4,12 @@ def read_csv(pathfile, sep=','):
 	with open(pathfile, 'r') as file:
 	# RIGA 1 labels
 		row = file.readline()
+		label_temp = []
 		label = []
 		temp = row.split(sep)
 		for x in temp:
-			label.append((x.strip(), 'f4'))
+			label_temp.append((x.strip(), 'f4'))
+			label.append(x.strip())
 	# RIGA 2 e tutte le successive, creiamo una matrice di dati.
 		matrix = []
 		for row in file:
@@ -17,8 +19,20 @@ def read_csv(pathfile, sep=','):
 				try:
 					value = float(x)
 				except:
-					value = np.nan
+					if (str(x) != ""):
+						value = str(x)
+					else:
+						value = np.nan
 				temp2.append(value)
 			matrix.append(tuple(temp2))
-	ret = np.array(matrix, dtype=label)
+	label_type = []
+	row = matrix[0]
+	i = 0
+	for x in row:
+		if isinstance(x, float):
+			label_type.append((label[i], "<f4"))
+		else:
+			label_type.append((label[i], '<U20'))
+		i += 1
+	ret = np.array(matrix, dtype=label_type)
 	return ret
