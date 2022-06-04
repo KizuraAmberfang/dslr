@@ -12,10 +12,10 @@ if len(sys.argv) != 2:
 matrix = read_csv(sys.argv[1], ',')
 
 print(matrix)
-# gryf = []
-# raven = []
-# huffle = []
-# slyth = []
+gryf = []
+raven = []
+huffle = []
+slyth = []
 # for x in matrix:
 # 	if x[1] == "Gryffindor":
 # 		gryf.append(x)
