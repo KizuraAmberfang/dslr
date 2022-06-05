@@ -68,7 +68,6 @@ plot_hist(gryf, raven, huffle, slyth, labels[15], axs[3, 0])
 plot_hist(gryf, raven, huffle, slyth, labels[16], axs[3, 1])
 plot_hist(gryf, raven, huffle, slyth, labels[17], axs[3, 2])
 plot_hist(gryf, raven, huffle, slyth, labels[18], axs[3, 3])
-plt.tick_params(labelcolor='none', which='both', top=False, bottom=False, left=False, right=False)
 
 fig.legend(["Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff"], loc="upper left", bbox_to_anchor=(0.1, -0.12, 1.0, 1.0), ncol=2)
 
