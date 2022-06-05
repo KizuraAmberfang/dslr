@@ -11,3 +11,9 @@ desc:
 
 hist:
 		python3 srcs/histogram.py data/dataset_train.csv
+
+scatter:
+		python3 srcs/scatter_plot.py data/dataset_train.csv
+
+pair:
+		python3 srcs/pair_plot.py data/dataset_train.csv
