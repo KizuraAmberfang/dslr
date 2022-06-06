@@ -29,11 +29,10 @@ huffle = matrix[temp[0]]
 temp = np.where(matrix[labels[1]] == "Slytherin")
 slyth = matrix[temp[0]]
 
+fig, ax = plt.subplots()
 plt.title("What are the two features that are similar?")
-plot_scatter(gryf, raven, huffle, slyth, labels[7], labels[9], plt)
+plot_scatter(gryf, raven, huffle, slyth, labels[7], labels[9], ax)
 
-plt.legend(["Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff"], loc="upper center", ncol=4)
+plt.legend(["Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff"], loc="upper right")
 
-plt.xlabel = labels[7]
-plt.ylabel = labels[9]
 plt.show()
