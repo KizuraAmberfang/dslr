@@ -1,6 +1,6 @@
 import numpy as np
 
-def plot_hist(gryf, raven, huffle, slyth, label, axs):
+def plot_hist(gryf, raven, huffle, slyth, label, axs, setTitle=True):
 
 	hg = gryf[label]
 	hg = hg[~np.isnan(hg)]
@@ -18,4 +18,5 @@ def plot_hist(gryf, raven, huffle, slyth, label, axs):
 	hh = hh[~np.isnan(hh)]
 	axs.hist(hh, color='yellow', alpha=0.4)
 
-	axs.set_title(label)
+	if setTitle:
+		axs.set_title(label)
