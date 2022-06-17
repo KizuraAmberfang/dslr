@@ -4,7 +4,7 @@ calc:
 		python3 main.py
 
 train:
-		python3 maintrainer.py
+		python3 srcs/logreg_train.py data/dataset_train.csv
 
 desc:
 		python3 srcs/describe.py data/dataset_train.csv
