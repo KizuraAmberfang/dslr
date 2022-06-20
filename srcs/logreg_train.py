@@ -23,7 +23,7 @@ if len(sys.argv) != 2:
 
 matrix = read_csv(sys.argv[1], ',')
 labels = matrix.dtype.names
-step = 30
+step = 3
 lr = 1 / 100
 
 # la nostra variabile dicotomica è la casata di Hogwarts
@@ -53,3 +53,7 @@ for i in range(step):
 		tempThetas[i] = thetas[i] - lr * (1/nRow) * sumPartialDer(thetas, matrix, y, labels, i)
 	thetas = tempThetas
 print(thetas)
+
+# thetas[0] = 1/1600 sum (g(thetas * riga i-esima) - risultato iesimo)) * matrix[i][0]
+# thetas * riga i-esima = 0 -> g = 1/2
+# risultato iesimo 1/2 o -1/2 che moltiplicano gli x[i][0]
