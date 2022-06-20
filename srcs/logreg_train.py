@@ -6,24 +6,34 @@ from utils.read_csv import read_csv
 def hThetafunc(thetas, x):
 	temp = 0
 	for i in range(len(thetas)):
-		if ~np.isnan(x[6 + i]):
-			temp += x[6 + i] * thetas[i]
-	ret = 1 / (1 + math.exp(temp * -1))
+		if ~np.isnan(x[1 + i]):
+			temp += x[1 + i] * thetas[i]
+	try:
+		ret = 1 / (1 + math.exp(temp * -1))
+	except:
+		if temp > 0:
+			ret = 1
+		else:
+			ret = 0
 	return ret
 
 def sumPartialDer(thetas, matrix, y, labels, j):
 	ret = 0
-	for i in range(len(matrix[labels[j + 6]])):
-		ret += (hThetafunc(thetas, matrix[i]) - y[i]) * matrix[labels[j + 6]][i]
+	for i in range(len(matrix[labels[j + 1]])):
+		if ~np.isnan(matrix[labels[j + 1]][i]):
+			ret += (hThetafunc(thetas, matrix[i]) - y[i]) * matrix[labels[j + 1]][i]
 	return ret
 
 if len(sys.argv) != 2:
 	print("Usage: python3 logreg_train.py fileName")
 	sys.exit(0)
 
-matrix = read_csv(sys.argv[1], ',')
+matrix_temp = read_csv(sys.argv[1], ',')
+labels = matrix_temp.dtype.names
+matrix = matrix_temp[[labels[1], labels[6], labels[7], labels[8], labels[10], labels[11], labels[12], labels[13], labels[14], labels[15], labels[16], labels[17], labels[18]]]
 labels = matrix.dtype.names
-step = 3
+n = len(labels) - 1
+step = 30
 lr = 1 / 100
 
 # la nostra variabile dicotomica è la casata di Hogwarts
@@ -42,18 +52,43 @@ lr = 1 / 100
 
 # P(Y = 1) = e^(a + b * x) / (1 + e^(a + bx))
 
-thetas = np.zeros(12)
-tempThetas = np.zeros(12)
+gthetas = np.zeros(n)
+rthetas = np.zeros(n)
+hthetas = np.zeros(n)
+sthetas = np.zeros(n)
+
+tempThetas = np.zeros(n)
 nRow = len(matrix[labels[0]])
 
-y = np.fromiter((x == "Gryffindor" for x in matrix["Hogwarts House"]), int)
+gryf = np.fromiter((x == "Gryffindor" for x in matrix["Hogwarts House"]), int)
+raven = np.fromiter((x == "Ravenclaw" for x in matrix["Hogwarts House"]), int)
+huff = np.fromiter((x == "Hufflepuff" for x in matrix["Hogwarts House"]), int)
+slyth = np.fromiter((x == "Slytherin" for x in matrix["Hogwarts House"]), int)
+
 
 for i in range(step):
-	for i in range(len(thetas)):
-		tempThetas[i] = thetas[i] - lr * (1/nRow) * sumPartialDer(thetas, matrix, y, labels, i)
-	thetas = tempThetas
-print(thetas)
+	for i in range(len(gthetas)):
+		tempThetas[i] = gthetas[i] - lr * (1/nRow) * sumPartialDer(gthetas, matrix, gryf, labels, i)
+	gthetas = tempThetas
+print(gthetas)
 
+for i in range(step):
+	for i in range(len(rthetas)):
+		tempThetas[i] = rthetas[i] - lr * (1/nRow) * sumPartialDer(rthetas, matrix, raven, labels, i)
+	rthetas = tempThetas
+print(rthetas)
+
+for i in range(step):
+	for i in range(len(hthetas)):
+		tempThetas[i] = hthetas[i] - lr * (1/nRow) * sumPartialDer(hthetas, matrix, huff, labels, i)
+	hthetas = tempThetas
+print(hthetas)
+
+for i in range(step):
+	for i in range(len(sthetas)):
+		tempThetas[i] = sthetas[i] - lr * (1/nRow) * sumPartialDer(sthetas, matrix, slyth, labels, i)
+	sthetas = tempThetas
+print(sthetas)
 # thetas[0] = 1/1600 sum (g(thetas * riga i-esima) - risultato iesimo)) * matrix[i][0]
 # thetas * riga i-esima = 0 -> g = 1/2
 # risultato iesimo 1/2 o -1/2 che moltiplicano gli x[i][0]
