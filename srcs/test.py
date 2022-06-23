@@ -1,4 +1,6 @@
 import numpy as np
 
-a = np.array([(1, 2, 3), (4,5,6), (7, 8, 9)])
-print(a[:, 1:])
+
+x = np.array([['ciao',2],['prova', 4], ['test', 6]], dtype={'names': ['a', 'b'], 'formats': ['U32', 'i4']})
+print(x)
+print(x.dtype)

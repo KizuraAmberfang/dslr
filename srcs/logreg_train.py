@@ -37,6 +37,7 @@ if len(sys.argv) != 2:
 	sys.exit(0)
 
 matrix_temp = read_csv_to_list(sys.argv[1], ',')
+print(matrix_temp.dtype)
 # labels = matrix_temp.dtype.names
 # print(labels)
 # matrix = matrix_temp[[labels[1], labels[6], labels[7], labels[8], labels[10], labels[11], labels[12], labels[13], labels[14], labels[15], labels[16], labels[17], labels[18]]]

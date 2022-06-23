@@ -70,6 +70,5 @@ def read_csv_to_list(pathfile, sep=','):
 		else:
 			label_type.append('<U20')
 		i += 1
-	ret = np.array(matrix)
-	# , dtype={'names': label, 'formats': label_type})
+	ret = np.array(matrix, dtype={'names': label, 'formats': label_type})
 	return ret
