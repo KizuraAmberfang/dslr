@@ -1,14 +1,20 @@
 import sys
 import numpy as np
 import math
-from utils.read_csv import read_csv_to_list
+import pandas as pd
 # from sklearn.metrics import accuracy_score
 
+def isnan(x):
+	if x != x:
+		return True
+	else:
+		return False
+		
 def hThetafunc(thetas, x):
 	temp = 0
 	for i in range(len(thetas)):
-		if ~np.isnan(x[1 + i]):
-			temp += x[1 + i] * thetas[i]
+		if ~np.isnan(x[i]):
+			temp += x[i] * thetas[i]
 	try:
 		ret = 1 / (1 + math.exp(temp * -1))
 	except:
@@ -28,24 +34,23 @@ def hThetafunc(thetas, x):
 def sumPartialDer(thetas, matrix, y, j):
 	ret = 0
 	for i in range(matrix.shape[0]):
-		if ~np.isnan(matrix[i][j + i]):
-			ret += (hThetafunc(thetas, matrix[i]) - y[i]) * matrix[i][j + 1]
+		if ~np.isnan(matrix[i][j]):
+			ret += (hThetafunc(thetas, matrix[i]) - y[i]) * matrix[i][j]
 	return ret
 
 if len(sys.argv) != 2:
 	print("Usage: python3 logreg_train.py fileName")
 	sys.exit(0)
 
-matrix_temp = read_csv_to_list(sys.argv[1], ',')
-print(matrix_temp.dtype)
+matrix_temp = pd.read_csv(sys.argv[1], ',')
 # labels = matrix_temp.dtype.names
 # print(labels)
 # matrix = matrix_temp[[labels[1], labels[6], labels[7], labels[8], labels[10], labels[11], labels[12], labels[13], labels[14], labels[15], labels[16], labels[17], labels[18]]]
-matrix = matrix_temp[:, [1, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18]]
-
+matrix = np.array(matrix_temp.values[:, [6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18]], dtype=float)
+y = matrix_temp.values[:, 1]
 # labels = matrix.dtype.names
 # n = len(labels) - 1
-n = matrix.shape[1] - 1
+n = matrix.shape[1]
 step = 30
 lr = 1 / 100
 
