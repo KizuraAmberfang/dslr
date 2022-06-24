@@ -1,7 +1,7 @@
 all:	train calc
 
 calc:
-		python3 main.py
+		python3 srcs/logreg_predict.py data/dataset_test.csv data/weight.csv
 
 train:
 		python3 srcs/logreg_train.py data/dataset_train.csv

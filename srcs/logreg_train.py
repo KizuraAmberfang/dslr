@@ -9,8 +9,14 @@ if len(sys.argv) != 2:
 	sys.exit(0)
 
 df = pd.read_csv(sys.argv[1], sep=',')
-df = df.dropna()
-matrix = np.array(df.values[:, [6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18]], dtype=float)
+df = df.dropna(subset=['Astronomy'])
+df = df.dropna(subset=['Herbology'])
+df = df.dropna(subset=['Divination'])
+df = df.dropna(subset=['Muggle Studies'])
+df = df.dropna(subset=['Ancient Runes'])
+df = df.dropna(subset=['Charms'])
+df = df.dropna(subset=['Flying'])
+matrix = np.array(df.values[:, [7, 8, 10, 11, 12, 17, 18]], dtype=float)
 y = df.values[:, 1]
 
 gd = GradientDescent(lr=0.01, iter=50)
@@ -23,7 +29,6 @@ X = sn.conv(matrix)
 
 gd.calculate_weight(X, y)
 
-print(gd.w)
 # la nostra variabile dicotomica è la casata di Hogwarts
 # la variabili indipendenti o regressori le altre variabili numeriche
 #  Y = ln(p / 1 - p) = b0 + b1 * x1 + .. + bn * xn

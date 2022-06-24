@@ -5,13 +5,13 @@ class GradientDescent(object):
 	"""
 
 """
-	def __init__(self, lr=0.1, iter=50, weight=None):
+	def __init__(self, lr=0.1, iter=50, weight=None, classes=None):
 		self.lr = lr
 		self.iter = iter
 		self.w = weight
 		self.error = []
 		self.cost = []
-		self.cl = None
+		self.cl = classes
 	
 	def calculate_weight(self, X, y):
 		# calcolo il numero di classi
@@ -27,7 +27,6 @@ class GradientDescent(object):
 		for i in range(0, len(y)):
 			yV[i, self.cl.index(y[i])] = 1
 		# iterazioni per calcolare i pesi!
-		print(tempX.shape)
 		for _ in range(0, self.iter):
 			htheta = self.sigmoid(tempX).T
 			self.w = self.w - (self.lr * (1 / row) * (htheta - yV).T.dot(tempX)) 
