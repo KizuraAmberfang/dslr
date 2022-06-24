@@ -2,7 +2,8 @@ import sys
 import numpy as np
 import math
 import pandas as pd
-# from sklearn.metrics import accuracy_score
+from utils.regression_model import GradientDescent
+from sklearn.metrics import accuracy_score
 
 def isnan(x):
 	if x != x:
@@ -24,13 +25,6 @@ def hThetafunc(thetas, x):
 			ret = 0
 	return ret
 
-# def sumPartialDer(thetas, matrix, y, labels, j):
-# 	ret = 0
-# 	for i in range(len(matrix[labels[j + 1]])):
-# 		if ~np.isnan(matrix[labels[j + 1]][i]):
-# 			ret += (hThetafunc(thetas, matrix[i]) - y[i]) * matrix[labels[j + 1]][i]
-# 	return ret
-
 def sumPartialDer(thetas, matrix, y, j):
 	ret = 0
 	for i in range(matrix.shape[0]):
@@ -42,18 +36,15 @@ if len(sys.argv) != 2:
 	print("Usage: python3 logreg_train.py fileName")
 	sys.exit(0)
 
-matrix_temp = pd.read_csv(sys.argv[1], ',')
-# labels = matrix_temp.dtype.names
-# print(labels)
-# matrix = matrix_temp[[labels[1], labels[6], labels[7], labels[8], labels[10], labels[11], labels[12], labels[13], labels[14], labels[15], labels[16], labels[17], labels[18]]]
-matrix = np.array(matrix_temp.values[:, [6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18]], dtype=float)
-y = matrix_temp.values[:, 1]
-# labels = matrix.dtype.names
-# n = len(labels) - 1
+df = pd.read_csv(sys.argv[1], sep=',')
+df = df.dropna()
+matrix = np.array(df.values[:, [6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18]], dtype=float)
+y = df.values[:, 1]
 n = matrix.shape[1]
-step = 30
-lr = 1 / 100
 
+gd = GradientDescent(lr=0.01, iter=30)
+gd.calculate_weight(matrix, y)
+print(gd.w)
 # la nostra variabile dicotomica è la casata di Hogwarts
 # la variabili indipendenti o regressori le altre variabili numeriche
 #  Y = ln(p / 1 - p) = b0 + b1 * x1 + .. + bn * xn
@@ -70,47 +61,8 @@ lr = 1 / 100
 
 # P(Y = 1) = e^(a + b * x) / (1 + e^(a + bx))
 
-gthetas = np.zeros(n)
-rthetas = np.zeros(n)
-hthetas = np.zeros(n)
-sthetas = np.zeros(n)
-
-tempThetas = np.zeros(n)
-nRow = matrix.shape[0]
-
-gryf = np.fromiter((x == "Gryffindor" for x in matrix[:, 1]), int)
-raven = np.fromiter((x == "Ravenclaw" for x in matrix[:, 1]), int)
-huff = np.fromiter((x == "Hufflepuff" for x in matrix[:, 1]), int)
-slyth = np.fromiter((x == "Slytherin" for x in matrix[:, 1]), int)
-
-
-for i in range(step):
-	for i in range(len(gthetas)):
-		tempThetas[i] = gthetas[i] - lr * (1/nRow) * sumPartialDer(gthetas, matrix, gryf, i)
-	gthetas = tempThetas
-print(gthetas)
-
-for i in range(step):
-	for i in range(len(rthetas)):
-		tempThetas[i] = rthetas[i] - lr * (1/nRow) * sumPartialDer(rthetas, matrix, raven, i)
-	rthetas = tempThetas
-print(rthetas)
-
-for i in range(step):
-	for i in range(len(hthetas)):
-		tempThetas[i] = hthetas[i] - lr * (1/nRow) * sumPartialDer(hthetas, matrix, huff, i)
-	hthetas = tempThetas
-print(hthetas)
-
-for i in range(step):
-	for i in range(len(sthetas)):
-		tempThetas[i] = sthetas[i] - lr * (1/nRow) * sumPartialDer(sthetas, matrix, slyth, i)
-	sthetas = tempThetas
-print(sthetas)
-
-# y_pred = ...
-# y_true = ...
-# print("Accuracy score: ", accuracy_score(y_true, y_pred))
+y_pred = gd.predict(matrix)
+print("Accuracy score: ", accuracy_score(y, y_pred))
 # thetas[0] = 1/1600 sum (g(thetas * riga i-esima) - risultato iesimo)) * matrix[i][0]
 # thetas * riga i-esima = 0 -> g = 1/2
 # risultato iesimo 1/2 o -1/2 che moltiplicano gli x[i][0]
