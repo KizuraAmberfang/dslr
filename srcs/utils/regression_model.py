@@ -36,6 +36,7 @@ class GradientDescent(object):
 		tempX = np.insert(X, 0, 1, axis=1)
 		calc = self.sigmoid(tempX).T
 		ret = []
+		# di ogni riga prendiamo l'indice del valore più alto!
 		for x in calc.argmax(1):
 			ret.append(self.cl[x])
 		return ret
