@@ -1,4 +1,5 @@
 import numpy as np
+from describeUtils import mean, std, variance
 
 class GradientDescent(object):
 	"""
@@ -26,6 +27,7 @@ class GradientDescent(object):
 		for i in range(0, len(y)):
 			yV[i, self.cl.index(y[i])] = 1
 		# iterazioni per calcolare i pesi!
+		print(tempX.shape)
 		for _ in range(0, self.iter):
 			htheta = self.sigmoid(tempX).T
 			self.w = self.w - (self.lr * (1 / row) * (htheta - yV).T.dot(tempX)) 
@@ -39,7 +41,19 @@ class GradientDescent(object):
 			ret.append(self.cl[x])
 		return ret
 
-	def sigmoid(self, X):
+	def sigmoid(self, X): 
 		temp = self.w.dot(X.T)
 		g = 1.0 / (1.0 + np.exp(-temp))
 		return g
+
+class SetNormalizer:
+	def __init__(self, mean=np.array([]), std=np.array([])):
+		self.mean = mean
+		self.std = std
+
+	def calc(self, X):
+		self.mean = mean(X)
+		self.std = std(variance(X, self.mean))
+
+	def conv(self, X):
+		return ((X - self.mean) / self.std)
