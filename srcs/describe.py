@@ -4,7 +4,6 @@ from utils.read_csv import read_csv
 import numpy as np
 
 # total arguments
-
 if len(sys.argv) != 2:
 	print("Usage: python3 describe.py fileName")
 	sys.exit(0)

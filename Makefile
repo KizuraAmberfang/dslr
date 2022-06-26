@@ -17,3 +17,6 @@ scatter:
 
 pair:
 		python3 srcs/pair_plot.py data/dataset_train.csv
+
+test:
+		python3 srcs/test.py

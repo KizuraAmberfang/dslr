@@ -1,6 +1,14 @@
 import numpy as np
+import pandas as pd
+from utils.ft_pandas import MyDataset
+from utils.read_csv import read_csv
 
+prova = MyDataset(read_csv('data/dataset_train.csv'))
+prova.mean()
+print('\n')
 
-x = np.array([['ciao',2],['prova', 4], ['test', 6]], dtype={'names': ['a', 'b'], 'formats': ['U32', 'i4']})
-print(x)
-print(x.dtype)
+prova2 = pd.read_csv('data/dataset_train.csv')
+prova3 = prova2.mean()
+print(prova3)
+print('\n')
+prova.describe()
