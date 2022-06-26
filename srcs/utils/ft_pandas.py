@@ -19,6 +19,7 @@ class MyDataset:
 		self.types = data.dtype
 		self.__countLabelChar()
 		self.__count()
+		self.__unique()
 		self.__mean()
 
 	def __str__(self):
@@ -81,6 +82,17 @@ class MyDataset:
 			else:
 				self.media.append(np.nan)
 
+	def __unique(self):
+		count = len(self.labels)
+		self.uni = []
+		for i in range(count):
+			n = 0
+			if (self.data.dtype[i] != 'float32'):
+				temp = self.data[self.labels[i]]
+				self.uni.append(len(np.unique(temp)))
+			else:
+				self.uni.append(np.NaN)
+
 	def count(self):
 		for i in range(len(self.cnt)):
 			print(f'{self.labels[i] : <{self.labelChar}}    {self.cnt[i]}')	
@@ -92,11 +104,26 @@ class MyDataset:
 				temp = f'{self.media[i]:.6f}'
 				print(f'{self.labels[i] : <{self.labelChar}}  {temp:>{lenprint}}')	
 
+	def unique(self):
+		lenprint = self.__calcLenArrInt(self.media)
+		for i in range(len(self.uni)):
+			if ~np.isnan(self.uni[i]):
+				print(f'{self.labels[i] : <{self.labelChar}}  {self.uni[i]:>{lenprint}}')	
+
 	def __calcLenArrFloat(self, array, decimal=2):
 		ret = 0
 		for x in array:
 			if ~np.isnan(x):
 				temp = len(str(np.trunc(x))) + decimal + 1
+				if temp > ret:
+					ret = temp
+		return ret
+
+	def __calcLenArrInt(self, array):
+		ret = 0
+		for x in array:
+			if ~np.isnan(x):
+				temp = len(str(x))
 				if temp > ret:
 					ret = temp
 		return ret
@@ -125,13 +152,18 @@ class MyDataset:
 	
 	def describe(self):
 		lenMedia = self.__calcLenArrFloat(self.media, 6)
-		print(f"{'Feature':<{self.labelChar}}   count {'mean':>{lenMedia}}")
+		lenUni = self.__calcLenArrInt(self.uni)
+		if lenUni < 6:
+			lenUni = 6 
+		print(f"{'Feature':<{self.labelChar}}   count {'mean':>{lenMedia}}  {'unique':>{lenUni}}")
 		print("*=================================================================*")
 		for i in range(len(self.labels)):
 			if self.types[i] == 'float32':
 				media = f'{self.media[i]:.6f}'
+				uniq = "NaN"
 			else:
 				media = "NaN"
-			print(f'{self.labels[i] : <{self.labelChar}}    {self.cnt[i]} {media:>{lenMedia}}')
+				uniq = self.uni[i]
+			print(f'{self.labels[i] : <{self.labelChar}}    {self.cnt[i]} {media:>{lenMedia}}  {uniq:>{lenUni}}')
 
 
