@@ -20,6 +20,7 @@ class MyDataset:
 		self.__countLabelChar()
 		self.__count()
 		self.__unique()
+		self.__top()
 		self.__mean()
 
 	def __str__(self):
@@ -92,6 +93,21 @@ class MyDataset:
 				self.uni.append(len(np.unique(temp)))
 			else:
 				self.uni.append(np.NaN)
+
+	def __top(self):
+		count = len(self.labels)
+		self.moda = []
+		for i in range(count):
+			if (self.data.dtype[i] != 'float32'):
+				temp = self.data[self.labels[i]]
+				arr = np.unique(temp)
+				print(arr)
+				for x in arr:
+					if (x != 'nan'):
+						temp2 = np.where(arr == x)
+						print(temp2)
+			else:
+				self.moda.append(np.nan)
 
 	def count(self):
 		for i in range(len(self.cnt)):
