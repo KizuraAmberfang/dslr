@@ -20,7 +20,6 @@ class MyDataset:
 		self.__countLabelChar()
 		self.__count()
 		self.__unique()
-		self.__top()
 		self.__mean()
 
 	def __str__(self):
@@ -86,28 +85,20 @@ class MyDataset:
 	def __unique(self):
 		count = len(self.labels)
 		self.uni = []
+		self.tp = []
+		self.frq = []
 		for i in range(count):
-			n = 0
 			if (self.data.dtype[i] != 'float32'):
 				temp = self.data[self.labels[i]]
-				self.uni.append(len(np.unique(temp)))
+				temp2 = np.unique(temp, return_counts=True)
+				print(temp2)
+				self.uni.append(len(temp2[0]))
+				self.tp.append(temp2[0][temp2[1].argmax()])
+				self.frq.append(temp2[1][temp2[1].argmax()])
 			else:
 				self.uni.append(np.NaN)
-
-	def __top(self):
-		count = len(self.labels)
-		self.moda = []
-		for i in range(count):
-			if (self.data.dtype[i] != 'float32'):
-				temp = self.data[self.labels[i]]
-				arr = np.unique(temp)
-				print(arr)
-				for x in arr:
-					if (x != 'nan'):
-						temp2 = np.where(arr == x)
-						print(temp2)
-			else:
-				self.moda.append(np.nan)
+				self.tp.append("nan")
+				self.frq.append(np.nan)
 
 	def count(self):
 		for i in range(len(self.cnt)):
@@ -125,6 +116,18 @@ class MyDataset:
 		for i in range(len(self.uni)):
 			if ~np.isnan(self.uni[i]):
 				print(f'{self.labels[i] : <{self.labelChar}}  {self.uni[i]:>{lenprint}}')	
+
+	def top(self):
+		lenprint = self.__calcLenArrStr(self.tp)
+		for i in range(len(self.tp)):
+			if self.tp[i] != "nan":
+				print(f'{self.labels[i] : <{self.labelChar}}  {self.tp[i]:>{lenprint}}')	
+
+	def freq(self):
+		lenprint = self.__calcLenArrInt(self.frq)
+		for i in range(len(self.frq)):
+			if ~np.isnan(self.frq[i]):
+				print(f'{self.labels[i] : <{self.labelChar}}  {self.frq[i]:>{lenprint}}')	
 
 	def __calcLenArrFloat(self, array, decimal=2):
 		ret = 0
@@ -144,27 +147,35 @@ class MyDataset:
 					ret = temp
 		return ret
 
-	def __calcLenPrint(self):
-		ret = []
-		for i in range(len(self.labels)):
-			temp = len(self.labels[i])
-			f_len = self.__len(self.cnt[i])
-			if f_len > temp:
-				temp = f_len
-			ret.append(temp + 2)
+	def __calcLenArrStr(self, array):
+		ret = 0
+		for x in array:
+			temp = len(str(x))
+			if temp > ret:
+				ret = temp
 		return ret
 
-	def __len(self, value: int) -> int:
-		str_len = 0
-		if ~np.isnan(value):
-			str_len = len(str(value)) + 2
-		return(str_len)
+	# def __calcLenPrint(self):
+	# 	ret = []
+	# 	for i in range(len(self.labels)):
+	# 		temp = len(self.labels[i])
+	# 		f_len = self.__len(self.cnt[i])
+	# 		if f_len > temp:
+	# 			temp = f_len
+	# 		ret.append(temp + 2)
+	# 	return ret
+
+	# def __len(self, value: int) -> int:
+	# 	str_len = 0
+	# 	if ~np.isnan(value):
+	# 		str_len = len(str(value)) + 2
+	# 	return(str_len)
 	
-	def __len(self, value: np.float32) -> int:
-		str_len = 0
-		if ~np.isnan(value):
-			str_len = len(str(np.trunc(value))) + 5
-		return(str_len)
+	# def __len(self, value: np.float32) -> int:
+	# 	str_len = 0
+	# 	if ~np.isnan(value):
+	# 		str_len = len(str(np.trunc(value))) + 5
+	# 	return(str_len)
 	
 	def describe(self):
 		lenMedia = self.__calcLenArrFloat(self.media, 6)
