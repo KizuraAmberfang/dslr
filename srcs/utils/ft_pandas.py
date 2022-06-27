@@ -28,6 +28,7 @@ class MyDataset:
 		self.perc25 = self.__cent(25)
 		self.perc50 = self.__cent(50)
 		self.perc75 = self.__cent(75)
+		self.__covariance()
 
 
 	def __str__(self):
@@ -109,6 +110,9 @@ class MyDataset:
 				self.var.append(sum / (n - 1))
 			else:
 				self.var.append(np.nan)
+	
+	def __covariance(self):
+		pass
 	
 	def __std(self):
 		self.stddev = []

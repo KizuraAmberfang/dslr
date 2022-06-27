@@ -20,3 +20,6 @@ pair:
 
 test:
 		python3 srcs/test.py
+
+bonus1:
+		python3 srcs/histogram_bonus.py data/dataset_train.csv
