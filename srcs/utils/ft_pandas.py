@@ -112,7 +112,14 @@ class MyDataset:
 				self.var.append(np.nan)
 	
 	def __covariance(self):
-		pass
+		count = len(self.labels)
+		self.cov = []
+		for i in range(count):
+			if (self.data.dtype[i] == 'float32' and ~np.isnan(self.media[i])):
+				temp = []
+				for j in range(count):
+					X = self.data[self.labels[i]] - self.media[i]
+
 	
 	def __std(self):
 		self.stddev = []
