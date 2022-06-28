@@ -19,7 +19,7 @@ pair:
 		python3 srcs/pair_plot.py data/dataset_train.csv
 
 test:
-		python3 srcs/test.py
+		python3 srcs/test.py data/dataset_train.csv
 
 bonus1:
 		python3 srcs/histogram_bonus.py data/dataset_train.csv
