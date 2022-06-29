@@ -58,3 +58,5 @@ with open('./data/weight.csv', 'w+') as file:
 		for i in range(gd.w.shape[0] - 1):
 			file.write(f'{gd.w[i][j]},')
 		file.write(f'{gd.w[gd.w.shape[0] - 1][j]}\n')
+
+gd.plot()

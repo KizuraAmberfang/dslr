@@ -28,8 +28,6 @@ class MyDataset:
 		self.perc25 = self.__cent(25)
 		self.perc50 = self.__cent(50)
 		self.perc75 = self.__cent(75)
-		self.__covariance()
-
 
 	def __str__(self):
 		print(self.data)

@@ -1,14 +1,13 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from describeUtils import mean, std, variance
 
 class GradientDescent(object):
-	"""
-
-"""
 	def __init__(self, lr=0.1, iter=50, weight=None, classes=None):
 		self.lr = lr
 		self.iter = iter
 		self.w = weight
+		self.thetas = []
 		self.error = []
 		self.cost = []
 		self.cl = classes
@@ -27,9 +26,11 @@ class GradientDescent(object):
 		for i in range(0, len(y)):
 			yV[i, self.cl.index(y[i])] = 1
 		# iterazioni per calcolare i pesi!
-		for _ in range(0, self.iter):
+		for i in range(0, self.iter):
 			htheta = self.sigmoid(tempX).T
-			self.w = self.w - (self.lr * (1 / row) * (htheta - yV).T.dot(tempX)) 
+			self.w = self.w - (self.lr * (1 / row) * (htheta - yV).T.dot(tempX))
+			self.thetas.append(self.w)
+			self.cost.append((self.__cost(yV, htheta), i))
 		return self
 
 	def predict(self, X):
@@ -45,6 +46,20 @@ class GradientDescent(object):
 		temp = self.w.dot(X.T)
 		g = 1.0 / (1.0 + np.exp(-temp))
 		return g
+	
+	def __cost(self, y, h):
+		p0 = (1 - y) * (np.log(1 - h))
+		p1 = y * (np.log(h))
+		J = -(1 / y.shape[1]) * sum(p1 - p0)
+		return (J)
+
+	def plot(self):
+		for cost,c in self.cost:
+			plt.plot(range(len(cost)),cost,'r')
+			plt.title("Convergence Graph of Cost Function of type-" + str(c) +" vs All")
+			plt.xlabel("Number of Iterations")
+			plt.ylabel("Cost")
+			plt.show()
 
 class SetNormalizer:
 	def __init__(self, mean=np.array([]), std=np.array([])):
