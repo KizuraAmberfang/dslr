@@ -2,11 +2,15 @@ import sys
 import numpy as np
 import pandas as pd
 from utils.regression_model import GradientDescent, SetNormalizer
-from sklearn.metrics import accuracy_score
 
-if len(sys.argv) != 2:
+if len(sys.argv) < 2:
 	print("Usage: python3 logreg_train.py fileName")
 	sys.exit(0)
+
+visual = False
+if len(sys.argv) == 3:
+	if (sys.argv[2] == "-v"):
+		visual = True
 
 df = pd.read_csv(sys.argv[1], sep=',')
 df = df.dropna(subset=['Astronomy'])
@@ -19,7 +23,7 @@ df = df.dropna(subset=['Flying'])
 matrix = np.array(df.values[:, [7, 8, 10, 11, 12, 17, 18]], dtype=float)
 y = df.values[:, 1]
 
-gd = GradientDescent(lr=0.01, iter=2)
+gd = GradientDescent(lr=0.01, iter=50)
 
 # standardizzo i valori delle colonne
 sn = SetNormalizer()
@@ -45,10 +49,6 @@ gd.calculate_weight(X, y)
 
 # P(Y = 1) = e^(a + b * x) / (1 + e^(a + bx))
 
-y_pred = gd.predict(X)
-print("Miss: ", sum(y != y_pred), "/", len(y))
-print(f"Accuracy score: {(accuracy_score(y, y_pred) * 100):.2f}%")
-
 with open('./data/weight.csv', 'w+') as file:
 	for i in range(0, len(gd.cl) - 1):
 		file.write(f'{gd.cl[i]},')
@@ -59,4 +59,5 @@ with open('./data/weight.csv', 'w+') as file:
 			file.write(f'{gd.w[i][j]},')
 		file.write(f'{gd.w[gd.w.shape[0] - 1][j]}\n')
 
-gd.plot()
+if visual:
+	gd.plot()

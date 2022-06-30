@@ -44,7 +44,7 @@ class GradientDescent(object):
 			ret.append(self.cl[x])
 		return ret
 
-	def sigmoid(self, X): 
+	def sigmoid(self, X):
 		temp = self.w.dot(X.T)
 		g = 1.0 / (1.0 + np.exp(-temp))
 		return g
@@ -60,11 +60,13 @@ class GradientDescent(object):
 				self.cost[n - 1][i] = self.cost[n - 2][i]
 
 	def plot(self):
-		fig, axs = plt.subplots(ncols=2, nrows=1)
-		axs[0].plot(range(1, len(self.cost) + 1), self.cost)
-		axs[1].plot(range(1, len(self.miss) + 1), self.miss)
+		fig, ax = plt.subplots()
+		ax.plot(range(1, len(self.cost) + 1), self.cost, marker='+')
+		ax.set_xlabel('Iteraction')
+		ax.set_ylabel('Cost')
+		ax.set_title('Cost function')
+		fig.legend(self.cl, loc="upper left")
 		plt.show()
-
 
 class SetNormalizer:
 	def __init__(self, mean=np.array([]), std=np.array([])):

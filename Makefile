@@ -23,3 +23,6 @@ test:
 
 bonus1:
 		python3 srcs/histogram_bonus.py data/dataset_train.csv
+
+bonus2:
+		python3 srcs/logreg_train.py data/dataset_train.csv -v	
