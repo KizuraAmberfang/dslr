@@ -69,8 +69,9 @@ class StochasticGradientDescent(object):
 		plt.show()
 
 class GradientDescent(object):
-	def __init__(self, lr=0.01, weight=None, classes=None):
+	def __init__(self, lr=0.01, iter=50, weight=None, classes=None):
 		self.lr = lr
+		self.iter = iter
 		self.w = weight
 		self.cost = []
 		self.miss = []
@@ -89,18 +90,13 @@ class GradientDescent(object):
 		yV = np.zeros((len(y), ncl))
 		for i in range(0, len(y)):
 			yV[i, self.cl.index(y[i])] = 1
-		htheta = self.sigmoid(tempX).T
 		# gradient descent
-		self.iter = 0
-		while htheta.max() > 0.01:
-			print(htheta.max())
-			self.iter += 1
-			htheta = self.sigmoid(tempX).T
-			self.__cost(yV, htheta, row)
-			self.miss.append(sum(y != self.predict(X)))
-			self.w = self.w - (self.lr * (1 / row) * (htheta - yV).T.dot(tempX))
-		print(htheta.max())
-		print("Number of iteration: ", self.iter)
+		for _ in range(self.iter):
+			pred = self.predict(tempX)
+			gradient = np.dot(tempX.T, pred - yV)
+			gradient /= row
+			gradient *= self.lr
+			self.w -= gradient
 		return self
 
 	def predict(self, X):
