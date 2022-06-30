@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 import pandas as pd
-from utils.regression_model import GradientDescent, SetNormalizer
+from utils.regression_model import StochasticGradientDescent, SetNormalizer, GradientDescent
 
 if len(sys.argv) < 2:
 	print("Usage: python3 logreg_train.py fileName")
@@ -23,7 +23,9 @@ df = df.dropna(subset=['Flying'])
 matrix = np.array(df.values[:, [7, 8, 10, 11, 12, 17, 18]], dtype=float)
 y = df.values[:, 1]
 
-gd = GradientDescent(lr=0.01, iter=50)
+
+# sgd = StochasticGradientDescent(lr=0.01, iter=50)
+sgd = GradientDescent()
 
 # standardizzo i valori delle colonne
 sn = SetNormalizer()
@@ -31,7 +33,7 @@ sn.calc(matrix)
 
 X = sn.conv(matrix)
 
-gd.calculate_weight(X, y)
+sgd.calculate_weight(X, y)
 
 # la nostra variabile dicotomica è la casata di Hogwarts
 # la variabili indipendenti o regressori le altre variabili numeriche
@@ -50,14 +52,14 @@ gd.calculate_weight(X, y)
 # P(Y = 1) = e^(a + b * x) / (1 + e^(a + bx))
 
 with open('./data/weight.csv', 'w+') as file:
-	for i in range(0, len(gd.cl) - 1):
-		file.write(f'{gd.cl[i]},')
-	file.write(f'{gd.cl[len(gd.cl) - 1]}\n')
+	for i in range(0, len(sgd.cl) - 1):
+		file.write(f'{sgd.cl[i]},')
+	file.write(f'{sgd.cl[len(sgd.cl) - 1]}\n')
 
-	for j in range(gd.w.shape[1]):
-		for i in range(gd.w.shape[0] - 1):
-			file.write(f'{gd.w[i][j]},')
-		file.write(f'{gd.w[gd.w.shape[0] - 1][j]}\n')
+	for j in range(sgd.w.shape[1]):
+		for i in range(sgd.w.shape[0] - 1):
+			file.write(f'{sgd.w[i][j]},')
+		file.write(f'{sgd.w[sgd.w.shape[0] - 1][j]}\n')
 
 if visual:
-	gd.plot()
+	sgd.plot()
