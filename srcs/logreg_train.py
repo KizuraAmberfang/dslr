@@ -19,7 +19,7 @@ df = df.dropna(subset=['Flying'])
 matrix = np.array(df.values[:, [7, 8, 10, 11, 12, 17, 18]], dtype=float)
 y = df.values[:, 1]
 
-gd = GradientDescent(lr=0.01, iter=50)
+gd = GradientDescent(lr=0.01, iter=2)
 
 # standardizzo i valori delle colonne
 sn = SetNormalizer()

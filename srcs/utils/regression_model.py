@@ -7,9 +7,8 @@ class GradientDescent(object):
 		self.lr = lr
 		self.iter = iter
 		self.w = weight
-		self.thetas = []
-		self.error = []
 		self.cost = []
+		self.miss = []
 		self.cl = classes
 	
 	def calculate_weight(self, X, y):
@@ -26,11 +25,14 @@ class GradientDescent(object):
 		for i in range(0, len(y)):
 			yV[i, self.cl.index(y[i])] = 1
 		# iterazioni per calcolare i pesi!
-		for i in range(0, self.iter):
+		for _ in range(0, self.iter):
 			htheta = self.sigmoid(tempX).T
+			self.__cost(yV, htheta, row)
+			self.miss.append(sum(y != self.predict(X)))
 			self.w = self.w - (self.lr * (1 / row) * (htheta - yV).T.dot(tempX))
-			self.thetas.append(self.w)
-			self.cost.append((self.__cost(yV, htheta), i))
+			n = len(self.cost) - 1
+			if n > 1 and (self.cost[n] == self.cost[n - 1]).all():
+				break
 		return self
 
 	def predict(self, X):
@@ -47,19 +49,22 @@ class GradientDescent(object):
 		g = 1.0 / (1.0 + np.exp(-temp))
 		return g
 	
-	def __cost(self, y, h):
-		p0 = (1 - y) * (np.log(1 - h))
-		p1 = y * (np.log(h))
-		J = -(1 / y.shape[1]) * sum(p1 - p0)
-		return (J)
+	def __cost(self, y, h, r):
+		p0 = (1 - y).T.dot(np.log(1 - h))
+		p1 = y.T.dot(np.log(h))
+		J = -(1 / r) * sum(p1 + p0)
+		self.cost.append(J)
+		n = len(self.cost)
+		for i in range(len(self.cl)):
+			if self.cost[n - 1][i] > self.cost[n - 2][i]:
+				self.cost[n - 1][i] = self.cost[n - 2][i]
 
 	def plot(self):
-		for cost,c in self.cost:
-			plt.plot(range(len(cost)),cost,'r')
-			plt.title("Convergence Graph of Cost Function of type-" + str(c) +" vs All")
-			plt.xlabel("Number of Iterations")
-			plt.ylabel("Cost")
-			plt.show()
+		fig, axs = plt.subplots(ncols=2, nrows=1)
+		axs[0].plot(range(1, len(self.cost) + 1), self.cost)
+		axs[1].plot(range(1, len(self.miss) + 1), self.miss)
+		plt.show()
+
 
 class SetNormalizer:
 	def __init__(self, mean=np.array([]), std=np.array([])):
