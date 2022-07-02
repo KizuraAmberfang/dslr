@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from describeUtils import mean, std, variance
 
-class StochasticGradientDescent(object):
+class GradientDescent(object):
 	def __init__(self, lr=0.1, iter=50, weight=None, classes=None):
 		self.lr = lr
 		self.iter = iter
@@ -68,8 +68,8 @@ class StochasticGradientDescent(object):
 		fig.legend(self.cl, loc="upper left")
 		plt.show()
 
-class GradientDescent(object):
-	def __init__(self, lr=0.01, iter=50, weight=None, classes=None):
+class BatchGradientDescent(object):
+	def __init__(self, lr=0.1, iter=50, weight=None, classes=None):
 		self.lr = lr
 		self.iter = iter
 		self.w = weight
@@ -81,22 +81,33 @@ class GradientDescent(object):
 		# calcolo il numero di classi
 		self.cl = np.unique(y).tolist()
 		ncl = len(self.cl)
-		# per motivi pratici inseriamo come prima colonna degli 0
+		# per motivi pratici inseriamo come prima colonna degli 1
 		tempX = np.insert(X, 0, 1, axis=1)
 		# la matrice ha row righe ed col colonne
 		row = tempX.shape[0]
 		col = tempX.shape[1]
+		# preparo i pesi a 0
 		self.w = np.zeros((ncl, col))
 		yV = np.zeros((len(y), ncl))
 		for i in range(0, len(y)):
 			yV[i, self.cl.index(y[i])] = 1
-		# gradient descent
-		for _ in range(self.iter):
-			pred = self.predict(tempX)
-			gradient = np.dot(tempX.T, pred - yV)
-			gradient /= row
-			gradient *= self.lr
-			self.w -= gradient
+		# creo il batch, prima una permutazione per le righe
+		perm = np.random.permutation(row)
+		ntest = (col + 1) * 10
+		if (ntest > row):
+			ntest = row
+			print("Attenzione, non sono presenti abbastanza dati per simulare un batch completo")
+		tempX = tempX[perm][:ntest]
+		yV = yV[perm][:ntest]
+		# iterazioni per calcolare i pesi!
+		for _ in range(0, self.iter):
+			htheta = self.sigmoid(tempX).T
+			self.__cost(yV, htheta, row)
+			self.miss.append(sum(y != self.predict(X)))
+			self.w = self.w - (self.lr * (1 / row) * (htheta - yV).T.dot(tempX))
+			n = len(self.cost) - 1
+			if n > 1 and (self.cost[n] == self.cost[n - 1]).all():
+				break
 		return self
 
 	def predict(self, X):
