@@ -9,10 +9,16 @@ if len(sys.argv) < 2:
 
 visual = False
 batch = False
-if len(sys.argv) == 3:
+if len(sys.argv) >= 3:
 	if sys.argv[2] == "-v":
 		visual = True
 	elif sys.argv[2] == "-b":
+		batch = True
+
+if len(sys.argv) >= 4:
+	if sys.argv[3] == "-v":
+		visual = True
+	elif sys.argv[3] == "-b":
 		batch = True
 
 df = pd.read_csv(sys.argv[1], sep=',')
