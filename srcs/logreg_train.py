@@ -8,9 +8,12 @@ if len(sys.argv) < 2:
 	sys.exit(0)
 
 visual = False
+batch = False
 if len(sys.argv) == 3:
-	if (sys.argv[2] == "-v"):
+	if sys.argv[2] == "-v":
 		visual = True
+	elif sys.argv[2] == "-b":
+		batch = True
 
 df = pd.read_csv(sys.argv[1], sep=',')
 df = df.dropna(subset=['Astronomy'])
@@ -25,7 +28,10 @@ y = df.values[:, 1]
 
 
 # sgd = StochasticGradientDescent(lr=0.01, iter=50)
-gd = BatchGradientDescent(lr=0.01)
+if batch:
+	gd = BatchGradientDescent(lr=0.01)
+else:
+	gd = GradientDescent(lr=0.01)
 
 # standardizzo i valori delle colonne
 sn = SetNormalizer()

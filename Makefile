@@ -25,4 +25,8 @@ bonus1:
 		python3 srcs/histogram_bonus.py data/dataset_train.csv
 
 bonus2:
-		python3 srcs/logreg_train.py data/dataset_train.csv -v	
+		python3 srcs/logreg_train.py data/dataset_train.csv -v
+
+bonus3:
+		python3	srcs/logreg_train.py data/dataset_train.csv -b
+		python3 srcs/logreg_predict.py data/dataset_test.csv data/weight.csv
