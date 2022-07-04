@@ -1,7 +1,7 @@
 # What are the two features that are similar?
 
 import sys
-from describeUtils import *
+import numpy as np
 from utils.plot_scatter import plot_scatter 
 from utils.read_csv import read_csv
 import matplotlib.pyplot as plt

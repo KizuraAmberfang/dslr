@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from describeUtils import mean, std, variance
+from utils.describeUtils import mean, std, variance
 
 class GradientDescent(object):
 	def __init__(self, lr=0.1, iter=50, weight=None, classes=None):

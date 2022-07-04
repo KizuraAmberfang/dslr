@@ -1,10 +1,10 @@
 # What feature are you going to use for your logistic regression?
 
 import sys
-from describeUtils import * 
 from utils.read_csv import read_csv
 from utils.plot_hist import plot_hist
 from utils.plot_scatter import plot_scatter
+import numpy as np
 import matplotlib.pyplot as plt
 from textwrap import wrap
 

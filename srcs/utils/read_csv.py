@@ -1,5 +1,4 @@
 import numpy as np
-import datetime
 
 def read_csv(pathfile, sep=','):
 	with open(pathfile, 'r') as file:

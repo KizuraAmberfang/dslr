@@ -1,9 +1,9 @@
 # which hogwarts course has a homogeneous score distribution between all four houses?
 
 import sys
-from describeUtils import * 
 from utils.read_csv import read_csv
 from utils.plot_hist import plot_hist
+import numpy as np
 import matplotlib.pyplot as plt
 
 if len(sys.argv) != 2:
